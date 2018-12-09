@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         int[] parameters = initializeParameters();
         Game newGame = new Game(parameters[0], parameters[1], parameters[2]);
-        newGame.printSolution();
+        newGame.printSolution(false);
 
         Player p = new Player(newGame);
         p.play();
