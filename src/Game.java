@@ -1,25 +1,27 @@
-import java.util.Arrays;
 import java.util.Random;
 
 public class Game {
     private int[][] board;
-    int bombs;
+    public int bombs;
 
     public Game(int nrow, int ncol, int bombs) {
         this.board = new int[nrow][ncol];
         this.bombs = bombs;
+        initialize_board(nrow, ncol, bombs);
+    }
 
+    private void initialize_board(int nrow, int ncol, int bombs) {
         Random r = new Random();
         while (bombs > 0) {
-            int rPos = r.nextInt(nrow);
-            int cPos = r.nextInt(ncol);
-            if (board[rPos][cPos] >= 0) {
-                board[rPos][cPos] = -9;
+            int r_row = r.nextInt(nrow);
+            int r_col = r.nextInt(ncol);
+            if (board[r_row][r_col] >= 0) {
+                board[r_row][r_col] = -9;
                 for (int x = -1; x < 2; ++x) {
                     for (int y = -1; y < 2; ++y) {
                         // surrounding squares
                         try {
-                            board[rPos + x][cPos + y]++;
+                            board[r_row + x][r_col + y]++;
                         } catch (ArrayIndexOutOfBoundsException e) {
                             continue;
                         }
@@ -30,28 +32,29 @@ public class Game {
         }
     }
 
-    public boolean isBomb(Coordinates coords) {
-        return board[coords.getX()][coords.getY()] < 0;
+    public boolean isBomb(Coordinate coords) {
+        return board[coords.x][coords.y] < 0;
     }
 
-    public boolean isZero(Coordinates coords) {
-        return board[coords.getX()][coords.getY()] == 0;
+    public boolean isZero(Coordinate coords) {
+        return board[coords.x][coords.y] == 0;
     }
 
-    public boolean isNumber(Coordinates coords) {
-        return board[coords.getX()][coords.getY()] > 0;
+    public boolean isNumber(Coordinate coords) {
+        return board[coords.x][coords.y] > 0;
     }
 
-    public char getNumber(Coordinates coords) {
-        return (char) (board[coords.getX()][coords.getY()] + (int) '0');
+    public char getNumber(Coordinate coords) {
+        return (char) (board[coords.x][coords.y] + (int) '0');
     }
 
 
-    public void printSolution() {
+    public void printSolution(boolean win) {
+        char danger = win ? '#' : 'X';
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if (board[i][j] < 0) {
-                    System.out.print("X ");
+                    System.out.print(danger + " ");
                 } else {
                     System.out.print(board[i][j] + " ");
                 }

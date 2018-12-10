@@ -9,10 +9,32 @@ public class Main {
     public static void main(String[] args) {
         int[] parameters = initializeParameters();
         Game newGame = new Game(parameters[0], parameters[1], parameters[2]);
-        newGame.printSolution();
+        newGame.printSolution(false);
+        int count = 0;
 
-        Player p = new Player(newGame);
-        p.play();
+        for (int i = 0; i < 1000; i++) {
+            Player p = new Player(newGame);
+            p.play();
+            if (p.success == 1) {
+                count ++;
+            }
+        }
+        System.out.println(count + " number of wins");
+
+
+
+//        int win_count= 0;
+//        for (int i = 0; i < 1000 ; i++) {
+//            System.out.println("aaaa" + i);
+//            Game newGame = new Game(16, 30, 99);
+//
+//            Player p = new Player(newGame);
+//            p.play();
+//            win_count += p.success;
+//            System.out.println(i + "th success is " + p.success);
+//
+//        }
+//        System.out.println("Wiiiiiiiiiiiin" + win_count);
     }
 
     private static int[] initializeParameters() {
