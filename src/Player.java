@@ -7,6 +7,7 @@ public class Player {
     private boolean completed;
     private int notFoundBombs;
     private Game game;
+    public int success = 0;
 
     public Player(Game game) {
         this.board = new char[game.getBoardWidth()][game.getBoardHeight()];
@@ -55,11 +56,11 @@ public class Player {
                 return;
             } else if (game.isNumber(coord)) {
                 updateBoard(coord, game.getNumber(coord));
-                print();
+//                print();
             } else {
                 //start = true;
                 openZeros(coord);
-                print();
+                //print();
                 coverTrivialCases();
             }
             coverTrivialCases();
@@ -111,7 +112,7 @@ public class Player {
             for (Coordinate c : CoordinateList) {
                 markFlag(c);
             }
-            print();
+//            print();
         }
     }
 
@@ -124,7 +125,7 @@ public class Player {
             }
         }
 
-        System.out.println();
+//        System.out.println();
     }
 
 
@@ -161,7 +162,7 @@ public class Player {
         if (count ==  Character.getNumericValue(game.getNumber(new Coordinate(x, y)))) {
             for (Coordinate c : CoordinateList) {
                 getResultsOfClick(c);
-                c.print();
+//                c.print();
                 if (!completed) {
                     doubleClick(c.x, c.y);
                 }
@@ -173,16 +174,17 @@ public class Player {
         int count = 0;
         while (!completed) {
             count++;
-            System.out.println("aaaa" + count);
+//            System.out.println("aaaa" + count);
             Random r = new Random();
             int r_row = r.nextInt(board.length);
             int r_col = r.nextInt(board[0].length);
 
             if (isNotVisible(r_row, r_col)) {
                 Coordinate coord = new Coordinate(r_row, r_col);
-                coord.print();
+//                coord.print();
                 getResultsOfClick(coord);
             }
+            print();
         }
     }
 
@@ -191,6 +193,7 @@ public class Player {
             completed = true;
             game.printSolution(true);
             System.out.println("You won the game!");
+            success = 1;
         } else {
             for (int i = 0; i < board.length; i++) {
                 for (int j = 0; j < board[0].length; j++) {

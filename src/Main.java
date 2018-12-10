@@ -7,12 +7,25 @@ public class Main {
 
     // swing for visualization ,, oracle
     public static void main(String[] args) {
-        int[] parameters = initializeParameters();
-        Game newGame = new Game(parameters[0], parameters[1], parameters[2]);
-        newGame.printSolution(false);
+//        int[] parameters = initializeParameters();
+//        Game newGame = new Game(parameters[0], parameters[1], parameters[2]);
+//        newGame.printSolution(false);
+//
+//        Player p = new Player(newGame);
+//        p.play();
 
-        Player p = new Player(newGame);
-        p.play();
+        int win_count= 0;
+        for (int i = 0; i < 1000 ; i++) {
+            System.out.println("aaaa" + i);
+            Game newGame = new Game(9, 9, 10);
+
+            Player p = new Player(newGame);
+            p.play();
+            win_count += p.success;
+            System.out.println(i + "th success is " + p.success);
+
+        }
+        System.out.println("Wiiiiiiiiiiiin" + win_count);
     }
 
     private static int[] initializeParameters() {
