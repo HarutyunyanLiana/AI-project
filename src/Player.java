@@ -41,6 +41,7 @@ public class Player {
             board[coord.x][coord.y] = '#';
             notFoundBombs--;
             updateAfterFlag(coord);
+            print();
         }
     }
 
@@ -56,15 +57,12 @@ public class Player {
                 return;
             } else if (game.isNumber(coord)) {
                 updateBoard(coord, game.getNumber(coord));
-//                print();
             } else {
-                //start = true;
                 openZeros(coord);
-                //print();
                 coverTrivialCases();
+                print();
             }
             coverTrivialCases();
-
         }
     }
 
@@ -112,7 +110,6 @@ public class Player {
             for (Coordinate c : CoordinateList) {
                 markFlag(c);
             }
-//            print();
         }
     }
 
@@ -125,7 +122,6 @@ public class Player {
             }
         }
 
-//        System.out.println();
     }
 
 
@@ -170,31 +166,127 @@ public class Player {
         }
     }
 
-    public void play() {
-        int count = 0;
-        while (!completed) {
-            count++;
-//            System.out.println("aaaa" + count);
-            Random r = new Random();
-            int r_row = r.nextInt(board.length);
-            int r_col = r.nextInt(board[0].length);
+    public void clickRandom() {
+        Random r = new Random();
+        int r_row = r.nextInt( board.length);
+        int r_col = r.nextInt(board[0].length);
 
-            if (isNotVisible(r_row, r_col)) {
-                Coordinate coord = new Coordinate(r_row, r_col);
-//                coord.print();
-                getResultsOfClick(coord);
-            }
-            print();
+        if (isNotVisible(r_row, r_col)) {
+            Coordinate coord = new Coordinate(r_row, r_col);
+            getResultsOfClick(coord);
         }
     }
 
-    private void print() {
+    public void findPatterns() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (isNotVisible(i, j)) {
+                    for (int x = -1; x < 2; x += 2) {
+                        try {
+                            if (isOpenedNumber(i + x, j)) {
+                                checkPatternRightLeft(i, j, x);
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            continue;
+                        }
+                    }
+
+                    for (int x = -1; x < 2; x += 2) {
+                        try {
+                            if (isOpenedNumber(i, j+x)) {
+                                checkPatternUpDown(i, j, x);
+                            }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            continue;
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    public void checkPatternRightLeft(int i, int j, int step) {
+        int count = 0;
+        int[] patterns = new int[4];
+        for (int x = 0; x < 4; ++x) {
+            try {
+                if (isOpenedNumber(i, j+x) && isNotVisible(i-step, j+x)) {
+                    patterns[x] = realValueOfCell(i, j + x);
+                    count++;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                continue;
+            }
+        }
+        if (count == 3 && patterns[0] == 1 && patterns[1] == 2 && patterns[2] == 1) {
+            markFlag(new Coordinate(i-step, j));
+            markFlag(new Coordinate(i-step, j+2));
+        } else if (count == 4 && patterns[0] == 1 && patterns[1] == 2 && patterns[2] == 2 && patterns[3] == 1) {
+            markFlag(new Coordinate(i-step, j+1));
+            markFlag(new Coordinate(i-step, j+2));
+        }
+    }
+
+    public void checkPatternUpDown(int i, int j, int step) {
+        int count = 0;
+        int[] patterns = new int[4];
+        for (int x = 0; x < 4; ++x) {
+            try {
+                if (isOpenedNumber(i + x, j) && isNotVisible(i+x, j-step)) {
+                    patterns[x] = realValueOfCell(i + x, j);
+                    count++;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                continue;
+            }
+        }
+        if (count == 3 && patterns[0] == 1 && patterns[1] == 2 && patterns[2] == 1) {
+            markFlag(new Coordinate(i, j - step));
+            markFlag(new Coordinate(i+2, j - step));
+        } else if (count == 4 && patterns[0] == 1 && patterns[1] == 2 && patterns[2] == 2 && patterns[3] == 1) {
+            markFlag(new Coordinate(i+1, j - step));
+            markFlag(new Coordinate(i+2, j - step));
+        }
+    }
+
+    public int realValueOfCell(int i, int j) {
+        int currentValue = Character.getNumericValue(game.getNumber(new Coordinate(i, j)));
+        for (int x = -1; x < 2; ++x) {
+            for (int y = -1; y < 2; ++y) {
+                try {
+                    if (isFlag(i + x, j + y)) {
+                        currentValue--;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    continue;
+                }
+
+            }
+        }
+        return currentValue;
+    }
+
+
+
+
+    public void play() {
+        clickRandom();
+        while (notFoundBombs != 0 && !completed) {
+            findPatterns();
+            clickRandom();
+        }
         if (notFoundBombs == 0) {
             completed = true;
+            success = 1;
             game.printSolution(true);
             System.out.println("You won the game!");
-            success = 1;
-        } else {
+        }
+
+    }
+
+    private void print() {
+        if (notFoundBombs != 0) {
             for (int i = 0; i < board.length; i++) {
                 for (int j = 0; j < board[0].length; j++) {
                     System.out.print(board[i][j] + " ");
@@ -202,10 +294,10 @@ public class Player {
                 System.out.println();
             }
             System.out.println("Remaining bombs to find are " + notFoundBombs);
+
+            System.out.println();
         }
     }
-
-
 
 
 }

@@ -15,9 +15,9 @@ public class Main {
 //        p.play();
 
         int win_count= 0;
-        for (int i = 0; i < 1000 ; i++) {
+        for (int i = 0; i < 100 ; i++) {
             System.out.println("aaaa" + i);
-            Game newGame = new Game(9, 9, 10);
+            Game newGame = new Game(16, 16, 40);
 
             Player p = new Player(newGame);
             p.play();
