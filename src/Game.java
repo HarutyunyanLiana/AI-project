@@ -4,13 +4,27 @@ public class Game {
     private int[][] board;
     public int bombs;
 
+    /**
+     * The constructor of the class
+     *
+     * @param nrow
+     * @param ncol
+     * @param bombs
+     */
     public Game(int nrow, int ncol, int bombs) {
         this.board = new int[nrow][ncol];
         this.bombs = bombs;
-        initialize_board(nrow, ncol, bombs);
+        initializeBoard(nrow, ncol, bombs);
     }
 
-    private void initialize_board(int nrow, int ncol, int bombs) {
+    /**
+     * Initialized the game board with the given sizes and number of bombs
+     *
+     * @param nrow
+     * @param ncol
+     * @param bombs
+     */
+    private void initializeBoard(int nrow, int ncol, int bombs) {
         Random r = new Random();
         while (bombs > 0) {
             int r_row = r.nextInt(nrow);
@@ -32,23 +46,56 @@ public class Game {
         }
     }
 
-    public boolean isBomb(Coordinate coords) {
-        return board[coords.x][coords.y] < 0;
+
+    /**
+     * Checks whether the cell with the given coordinates is a bomb.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean isBomb(int x, int y) {
+        return board[x][y] < 0;
     }
 
-    public boolean isZero(Coordinate coords) {
-        return board[coords.x][coords.y] == 0;
+    /**
+     * Checks whether the cell value with the given coordinates is zero.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean isZero(int x, int y) {
+        return board[x][y] == 0;
     }
 
-    public boolean isNumber(Coordinate coords) {
-        return board[coords.x][coords.y] > 0;
+    /**
+     * Checks whether the cell with the given coordinates is a number.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean isNumber(int x, int y) {
+        return board[x][y] > 0;
     }
 
-    public char getNumber(Coordinate coords) {
-        return (char) (board[coords.x][coords.y] + (int) '0');
+    /**
+     * Gets the numeric value of the cell.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public char getNumber(int x, int y) {
+        return (char) (board[x][y] + (int) '0');
     }
 
-
+    /**
+     * Prints the solution of the game.
+     *
+     * @param win
+     */
     public void printSolution(boolean win) {
         char danger = win ? '#' : 'X';
         for (int i = 0; i < board.length; i++) {
@@ -63,13 +110,21 @@ public class Game {
         }
     }
 
+    /**
+     * Returns the width of the board.
+     *
+     * @return
+     */
     public int getBoardWidth() {
         return board.length;
     }
 
+    /**
+     * Returns the height of the board.
+     *
+     * @return
+     */
     public int getBoardHeight() {
         return board[0].length;
     }
-
-
 }
