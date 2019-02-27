@@ -5,29 +5,20 @@ public class Main {
     private static final int MAX_SIZE = 50;
     private static final double MAX_BOMB_COVERAGE = 0.3;
 
-    // swing for visualization ,, oracle
     public static void main(String[] args) {
-//        int[] parameters = initializeParameters();
-//        Game newGame = new Game(parameters[0], parameters[1], parameters[2]);
-//        newGame.printSolution(false);
-//
-//        Player p = new Player(newGame);
-//        p.play();
+        int[] parameters = initializeParameters();
+        Game newGame = new Game(parameters[0], parameters[1], parameters[2]);
+        newGame.printSolution(false);
 
-        int win_count= 0;
-        for (int i = 0; i < 100 ; i++) {
-            System.out.println("aaaa" + i);
-            Game newGame = new Game(16, 16, 40);
-
-            Player p = new Player(newGame);
-            p.play();
-            win_count += p.success;
-            System.out.println(i + "th success is " + p.success);
-
-        }
-        System.out.println("Wiiiiiiiiiiiin" + win_count);
+        Player p = new Player(newGame);
+        p.play();
     }
 
+    /**
+     * Gets inputs from user and initializes the game parameters.
+     *
+     * @return the number od rows, columns and bombs as an integer array.
+     */
     private static int[] initializeParameters() {
         Scanner reader = new Scanner(System.in);
         System.out.println("Please enter the height of the board: ");
